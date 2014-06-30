@@ -6,7 +6,7 @@ var TIMEOUT = 10;
 var interval;
 
 function incrementScore(points) {
-    points = points !== undefined ? points : 1;
+    points = points || 1;
     score += points;
     $("#score").html(score);
 }
@@ -92,11 +92,29 @@ function createPuzzle(word) {
         .html(" " + target.timeout.toFixed(2))
         .attr("id", "timeout_" + puzzleId)
         .attr("class", "timeout")
+        .css("text-align", "center")
         .appendTo("#puzzles");
 }
 
+CELLS_IN_ROW = 2;
+
+function createBoard(rows) {
+    rows = rows || 2;
+    var row, cell;
+    var i, j;
+    
+    for (i = 0; i < rows; i++) {
+        row = $("<div/>").attr("class", "grid-row");
+        for (j = 0; j < CELLS_IN_ROW; j++) {
+            cell = $("<div/>").attr("class", "grid-cell").attr("id", "cell_" + i + "_" + j);
+            row.append(cell);
+        }
+        $("#grid-container").append(row);
+    }
+}
 
 $(document).ready(function () {
+    createBoard(2);
     createPuzzle("blat");
     createPuzzle("nahui");
     createPuzzle("blip");
@@ -104,4 +122,10 @@ $(document).ready(function () {
     $(document).keypress(keypress);
     interval = setInterval(doTimeouts, INTERVAL);
 });
+
+
+
+/* TODO:
+    calc cell width wrt CELLS_IN_ROW
+*/
 
