@@ -1,0 +1,19 @@
+
+html, body {
+ /* margin: 0; */
+ /* padding: 0; */
+ background: #293134;
+ color: #678cb1;  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+ font-size: 80px; 
+}
+
+body {
+ /* width: 860px;  */
+ margin: 0 auto;
+}
+
+#score {
+ position: absolute;
+ left:     50vw;
+ /* top:     50vh; */
+} 
