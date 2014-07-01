@@ -1,11 +1,16 @@
 
 var targets = [];
 var board = [];
-var empty_cells = [];
+var empty = [];
+var populated = [];
 var score = 0;
 var lives = 3;
 var TIMEOUT = 10;
 var interval;
+
+function cellString(i, j) {
+    return "cell_" + i + "_" + j;
+}
 
 function incrementScore(points) {
     points = points || 1;
@@ -13,41 +18,83 @@ function incrementScore(points) {
     $("#score").html(score);
 }
 
-function replacePuzzle(puzzle, target) { // TODO: remove?
-    target.lenSuccess = 0;
-    target.timeout = TIMEOUT;
-    target.word = words[Math.floor(Math.random() * words.length)];
-    puzzle.innerHTML = target.word;
-}
+//handles char success and returns whether there was any
+function charSuccess(where, charCode) {
+    var target = board[where.x][where.y];
+    
+    if (charCode != target.word.charCodeAt(target.lenSuccess))
+        return false;
 
-function charSuccess(puzzle, target) {
     incrementScore();
     target.lenSuccess++;
-    var text = puzzle.textContent;
+    var puzzle = $("#" + cellString(where.x, where.y));
+    var text = puzzle.text();
     var firstPart = text.slice(0, target.lenSuccess);
     var rest = text.slice(target.lenSuccess);
 
     var h = "<span style=\"font-weight:bold\">" + firstPart + "</span>";
-    puzzle.innerHTML = h + rest;
+    puzzle.html(h + rest);
 
-    if (target.lenSuccess == text.length) { // puzzle finished
+    return true;
+}
+
+function wordSuccess(where) {
+    var target = board[where.x][where.y];
+
+    if (target.lenSuccess == target.word.length) {
         incrementScore(10); // bonus
-        replacePuzzle(puzzle, target);
+        return true;
+    }
+    return false;
+}
+
+function removeItem(arr, item) {
+    var index = arr.indexOf(item);
+    if (index != -1)
+        return arr.splice(index, 1)[0];
+}
+
+function checkSuccess(key) {
+    var succeeded = [];
+
+    for (i = 0; i < populated.length; i++) {
+        where = populated[i];
+        target = board[where.x][where.y];
+        // TODO: allow also uppercase
+        if (!target.lost)
+            if (charSuccess(where, key.which))
+                if (wordSuccess(where))
+                    succeeded.push(where);
+    }
+
+    return succeeded;
+}
+
+function removeSucceeded(succeeded) {
+    for (var i = 0; i < succeeded.length; i++) {
+        where = succeeded[i];
+        removeItem(populated, where);
+        board[where.x][where.y] = undefined;
+        empty.push(where);
+        $("#" + cellString(where.x, where.y)).html("");
     }
 }
 
 function keypress(key) {
-    var puzzles = $("#puzzles .puzzle");
+    
     var target;
-    var puzzle;
     var i;
+    var succeeded; // list of indexes of completed puzzles
+    var where;
+    
+    succeeded = checkSuccess(key);
 
-    for (i = 0; i < puzzles.length; i++) {
-        target = targets[i];
-        puzzle = puzzles[i];
-        if (!target.lost && key.which == target.word.charCodeAt(target.lenSuccess))
-            charSuccess(puzzle, target);
-    }
+    // removing succeeded targets here so `populated`'s length wouldn't change
+    // during the previous loop
+    removeSucceeded(succeeded);
+
+    if (succeeded.length)
+        createAndPopulate(succeeded.length);
 }
 
 function gameOver() {
@@ -93,13 +140,12 @@ function randFromArray(arr, remove) {
 
 function populate(target) {
     // console.log("FUNCTION:   " + arguments.callee.name);
-    var where = randFromArray(empty_cells, true);
+    var where = randFromArray(empty, true);
     
     board[where.x][where.y] = target;
-    $("<div/>")
-        .attr("class", "target-on-board")
-        .text(target.word)
-        .appendTo($("#cell_" + where.x + "_" + where.y));
+    populated.push(where);
+
+    $("#" + cellString(where.x, where.y)).text(target.word);
     
 
     // $("<div/>")
@@ -117,11 +163,26 @@ function populate(target) {
         // .appendTo("#puzzles");
 }
 
-
-function createAndPopulate(word) {
-    word = word || randFromArray(words);
+function doCreateAndPopulate(word) {
     var target = createPuzzle(word);
     populate(target);
+}
+
+//if arg is a string, use it as a word.
+//if it's a number, create several random words.
+function createAndPopulate(arg) {
+    var word, num, i;
+    
+    if (typeof arg == "string") {
+        doCreateAndPopulate(arg);
+        return;
+    }
+    
+    num = arg || 1;    
+    for (i = 0; i < num; i++) {
+        word = randFromArray(words);
+        doCreateAndPopulate(word);
+    }
 }
 
 CELLS_IN_ROW = 2;
@@ -135,8 +196,8 @@ function createBoard(rows) {
         board.push([]);
         row = $("<div/>").attr("class", "grid-row");
         for (j = 0; j < CELLS_IN_ROW; j++) {
-            empty_cells.push({x: i, y: j});
-            cell = $("<div/>").attr("class", "grid-cell").attr("id", "cell_" + i + "_" + j);
+            empty.push({x: i, y: j});
+            cell = $("<div/>").attr("class", "grid-cell").attr("id", cellString(i,j));
             row.append(cell);
         }
         $("#game-container").append(row);
@@ -148,7 +209,6 @@ $(document).ready(function () {
     createAndPopulate("blat");
     createAndPopulate("nahui");
     createAndPopulate("blip");
-    createAndPopulate("blop");
     $(document).keypress(keypress);
     interval = setInterval(doTimeouts, INTERVAL);
 });
@@ -157,5 +217,6 @@ $(document).ready(function () {
 
 /* TODO:
     calc cell width wrt CELLS_IN_ROW
+    levels according to statistics
 */
 
