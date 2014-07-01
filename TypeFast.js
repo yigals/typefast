@@ -1,5 +1,7 @@
 
 var targets = [];
+var board = [];
+var empty_cells = [];
 var score = 0;
 var lives = 3;
 var TIMEOUT = 10;
@@ -11,7 +13,7 @@ function incrementScore(points) {
     $("#score").html(score);
 }
 
-function replacePuzzle(puzzle, target) {
+function replacePuzzle(puzzle, target) { // TODO: remove?
     target.lenSuccess = 0;
     target.timeout = TIMEOUT;
     target.word = words[Math.floor(Math.random() * words.length)];
@@ -43,9 +45,8 @@ function keypress(key) {
     for (i = 0; i < puzzles.length; i++) {
         target = targets[i];
         puzzle = puzzles[i];
-        if (!target.lost && key.which == target.word.charCodeAt(target.lenSuccess)) {
+        if (!target.lost && key.which == target.word.charCodeAt(target.lenSuccess))
             charSuccess(puzzle, target);
-        }
     }
 }
 
@@ -79,21 +80,48 @@ function doTimeouts() {
 
 function createPuzzle(word) {
     var target = {word: word, lenSuccess: 0, timeout: TIMEOUT, lost: false};
-    targets.push(target);
-    var puzzleId = targets.length - 1;
-    $("<div/>")
-        .html(word)
-        .attr("id", "puzzle_" + puzzleId)
-        .attr("class", "puzzle")
-        .css("text-align", "center")
-        .appendTo("#puzzles");
+    return target;
+}
 
-    $("<span/>")
-        .html(" " + target.timeout.toFixed(2))
-        .attr("id", "timeout_" + puzzleId)
-        .attr("class", "timeout")
-        .css("text-align", "center")
-        .appendTo("#puzzles");
+function randFromArray(arr, remove) {
+    var index = Math.floor(Math.random() * arr.length);
+    var element = arr[index];
+    if (remove)
+        arr.splice(index, 1);
+    return element;
+}
+
+function populate(target) {
+    // console.log("FUNCTION:   " + arguments.callee.name);
+    var where = randFromArray(empty_cells, true);
+    
+    board[where.x][where.y] = target;
+    $("<div/>")
+        .attr("class", "target-on-board")
+        .text(target.word)
+        .appendTo($("#cell_" + where.x + "_" + where.y));
+    
+
+    // $("<div/>")
+        // .html(word)
+        // .attr("id", "puzzle_" + puzzleId)
+        // .attr("class", "puzzle")
+        // .css("text-align", "center")
+        // .appendTo("#puzzles");
+
+    // $("<span/>")
+        // .html(" " + target.timeout.toFixed(2))
+        // .attr("id", "timeout_" + puzzleId)
+        // .attr("class", "timeout")
+        // .css("text-align", "center")
+        // .appendTo("#puzzles");
+}
+
+
+function createAndPopulate(word) {
+    word = word || randFromArray(words);
+    var target = createPuzzle(word);
+    populate(target);
 }
 
 CELLS_IN_ROW = 2;
@@ -104,21 +132,23 @@ function createBoard(rows) {
     var i, j;
     
     for (i = 0; i < rows; i++) {
+        board.push([]);
         row = $("<div/>").attr("class", "grid-row");
         for (j = 0; j < CELLS_IN_ROW; j++) {
+            empty_cells.push({x: i, y: j});
             cell = $("<div/>").attr("class", "grid-cell").attr("id", "cell_" + i + "_" + j);
             row.append(cell);
         }
-        $("#grid-container").append(row);
+        $("#game-container").append(row);
     }
 }
 
 $(document).ready(function () {
     createBoard(2);
-    createPuzzle("blat");
-    createPuzzle("nahui");
-    createPuzzle("blip");
-    createPuzzle("blop");
+    createAndPopulate("blat");
+    createAndPopulate("nahui");
+    createAndPopulate("blip");
+    createAndPopulate("blop");
     $(document).keypress(keypress);
     interval = setInterval(doTimeouts, INTERVAL);
 });
