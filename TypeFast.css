@@ -98,3 +98,10 @@ h1#title {
 .grid-cell:last-child {
     margin-right: 0;
 }
+
+.target-on-board {
+    text-align: center;
+    vertical-align: -100px;
+    padding-top: 20px;
+    color: white;
+}
