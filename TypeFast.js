@@ -14,6 +14,16 @@ function cellString(i, j) {
 
 function incrementScore(points) {
     points = points || 1;
+    var plus_container;
+    
+    $("#plus").html(points);
+    
+    plus_container = $("#plus-container");
+    plus_container.removeClass("plus-container-animation");
+    // ugly workaround to retrigger animation...
+    plus_container.replaceWith(plus_container.clone(true));
+    $("#plus-container").addClass("plus-container-animation");
+
     score += points;
     $("#score").html(score);
 }
