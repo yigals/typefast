@@ -204,13 +204,27 @@ function createBoard(rows) {
     }
 }
 
-$(document).ready(function () {
+function newGame() {
+    clearInterval(interval);
+    targets = [];
+    board = [];
+    empty = [];
+    populated = [];
+    score = 0;
+    lives = 3;
+    $("#game-container").html("");
+    $("#score").html(score);
     createBoard(2);
     createAndPopulate("blat");
     createAndPopulate("nahui");
     createAndPopulate("blip");
     $(document).keypress(keypress);
     interval = setInterval(doTimeouts, INTERVAL);
+}
+
+$(document).ready(function () {
+    $("#new-game").click(newGame);
+    newGame();
 });
 
 
