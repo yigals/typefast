@@ -126,7 +126,10 @@ h1#title {
 
 
 .grid-cell-populated {
-    animation: blacken 1s;
+    -webkit-animation: blacken 1s;
+       -moz-animation: blacken 1s;
+            -o-animation: blacken 1s;
+                 animation: blacken 1s;
     background: black;
 }
 
