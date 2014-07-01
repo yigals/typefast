@@ -48,7 +48,7 @@ function charSuccess(where, charCode) {
     var firstPart = text.slice(0, target.lenSuccess);
     var rest = text.slice(target.lenSuccess);
 
-    var h = "<span style=\"font-weight:bold\">" + firstPart + "</span>";
+    var h = "<span style=\"color:#6699FF\">" + firstPart + "</span>";
     puzzle.html(h + rest);
 
     return true;
@@ -92,7 +92,7 @@ function removeSucceeded(succeeded) {
         removeItem(populated, where);
         board[where.x][where.y] = undefined;
         empty.push(where);
-        $("#" + cellString(where.x, where.y)).html("");
+        $("#" + cellString(where.x, where.y)).html("").removeClass("grid-cell-populated");
     }
 }
 
@@ -160,8 +160,10 @@ function populate(target) {
     
     board[where.x][where.y] = target;
     populated.push(where);
+    
+    var cell = $("#" + cellString(where.x, where.y));
 
-    $("#" + cellString(where.x, where.y)).text(target.word);
+    cell.text(target.word).addClass("grid-cell-populated");
     
 
     // $("<div/>")
@@ -235,7 +237,7 @@ function newGame() {
     createAndPopulate("nahui");
     createAndPopulate("blip");
     $(document).keypress(keypress);
-    interval = setInterval(doTimeouts, INTERVAL);
+    // interval = setInterval(doTimeouts, INTERVAL);
 }
 
 $(document).ready(function () {
