@@ -15,6 +15,7 @@ function cellString(i, j) {
 function incrementScore(points) {
     points = points || 1;
     var plus_container;
+    var best;
     
     $("#plus").html(points);
     
@@ -25,6 +26,11 @@ function incrementScore(points) {
     $("#plus-container").addClass("plus-container-animation");
 
     score += points;
+    
+    best = $("#best");
+    if (best.html() < score)
+        best.html(score);
+    
     $("#score").html(score);
 }
 
