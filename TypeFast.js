@@ -14,24 +14,19 @@ function cellString(i, j) {
 
 function incrementScore(points) {
     points = points || 1;
-    var plus_container;
     var best;
     
     $("#plus").html(points);
     
-    plus_container = $("#plus-container");
-    plus_container.removeClass("plus-container-animation");
-    // ugly workaround to retrigger animation...
-    plus_container.replaceWith(plus_container.clone(true));
-    $("#plus-container").addClass("plus-container-animation");
+    rebootTransition("#plus-container", "plus-container-animation");
 
     score += points;
+    $("#score").html(score);
     
     best = $("#best");
     if (best.html() < score)
         best.html(score);
     
-    $("#score").html(score);
 }
 
 //handles char success and returns whether there was any
@@ -154,6 +149,16 @@ function randFromArray(arr, remove) {
     return element;
 }
 
+// ugly workaround to retrigger animation...
+// jId should be of jquery form ("#cell_2_1" and such)
+function rebootTransition(jId, className) {
+    var old = $(jId);
+    old.removeClass(className);
+    old.replaceWith(old.clone(true));
+    
+    return $(jId).addClass(className);
+}
+
 function populate(target) {
     // console.log("FUNCTION:   " + arguments.callee.name);
     var where = randFromArray(empty, true);
@@ -161,9 +166,8 @@ function populate(target) {
     board[where.x][where.y] = target;
     populated.push(where);
     
-    var cell = $("#" + cellString(where.x, where.y));
-
-    cell.text(target.word).addClass("grid-cell-populated");
+    rebootTransition("#" + cellString(where.x, where.y), "grid-cell-populated")
+        .text(target.word);
     
 
     // $("<div/>")
