@@ -119,18 +119,17 @@ h1#title {
     color: white;
 }
 
-@-webkit-keyframes blacken { 0% { background: #ffffff; } 100% { background: #000000; } }
-   @-moz-keyframes blacken { 0% { background: #ffffff; } 100% { background: #000000; } }
-        @-o-keyframes blacken { 0% { background: #ffffff; } 100% { background: #000000; } }
-             @keyframes blacken { 0% { background: #ffffff; } 100% { background: #000000; } }
+@-webkit-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
+   @-moz-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
+        @-o-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
+             @keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
 
 
 .grid-cell-populated {
-    -webkit-animation: blacken 1s;
-       -moz-animation: blacken 1s;
-            -o-animation: blacken 1s;
-                 animation: blacken 1s;
-    background: black;
+    -webkit-animation: blacken 10s;
+       -moz-animation: blacken 10s;
+            -o-animation: blacken 10s;
+                 animation: blacken 10s;
 }
 
 .grid-cell:last-child {
