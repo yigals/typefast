@@ -6,19 +6,18 @@ var populated = [];
 var score = 0;
 var lives = 3;
 var TIMEOUT = 10;
-var interval;
 
 function cellString(i, j) {
-    return "cell_" + i + "_" + j;
+    return ".grid-cell" + "[x=" + i + "]" + "[y=" + j + "]";
 }
 
 function incrementScore(points) {
     points = points || 1;
     var best;
-    
+
     $("#plus").html(points);
-    
-    rebootTransition("#plus-container", "plus-container-animation");
+   
+    rebootAnimation("#plus-container", "plus-container-animation");
 
     score += points;
     $("#score").html(score);
@@ -38,7 +37,7 @@ function charSuccess(where, charCode) {
 
     incrementScore();
     target.lenSuccess++;
-    var puzzle = $("#" + cellString(where.x, where.y));
+    var puzzle = $(cellString(where.x, where.y));
     var text = puzzle.text();
     var firstPart = text.slice(0, target.lenSuccess);
     var rest = text.slice(target.lenSuccess);
@@ -81,22 +80,23 @@ function checkSuccess(key) {
     return succeeded;
 }
 
-function removeSucceeded(succeeded) {
-    for (var i = 0; i < succeeded.length; i++) {
-        where = succeeded[i];
+function removePuzzle(where) {
         removeItem(populated, where);
         board[where.x][where.y] = undefined;
         empty.push(where);
-        $("#" + cellString(where.x, where.y)).html("").removeClass("grid-cell-populated");
+        $(cellString(where.x, where.y)).html("").removeClass("grid-cell-populated");
+}
+
+function removeSucceeded(succeeded) {
+    for (var i = 0; i < succeeded.length; i++) {
+        where = succeeded[i];
+        removePuzzle(where);
     }
 }
 
 function keypress(key) {
     
-    var target;
-    var i;
     var succeeded; // list of indexes of completed puzzles
-    var where;
     
     succeeded = checkSuccess(key);
 
@@ -109,31 +109,24 @@ function keypress(key) {
 }
 
 function gameOver() {
-    clearInterval(interval);
     $(document).off("keypress");
+    var populatedCells = $(".grid-cell-populated");
+    populatedCells.off();
+    populatedCells.addClass("paused");
 }
 
-var INTERVAL = 100;
+function puzzleFailedHandler(e) {
+    lives--;
 
-function doTimeouts() {
-    var puzzles = $("#puzzles");
-    var i;
-
-    for (i = 0; i < targets.length; i++) {
-        var target = targets[i];
-        if (!target.lost) {
-            if (target.timeout > INTERVAL / 1000 / 2) { // "checking for non-zero"...
-                target.timeout -= INTERVAL / 1000;
-            } else {
-                target.lost = true;
-                puzzles.children("#puzzle_" + i).css("text-decoration", "line-through");
-                lives--;
-                if (lives == 0)
-                    gameOver();
-            }
-        }
-        puzzles.children("#timeout_" + i)[0].innerHTML = " " + target.timeout.toFixed(2);
+    if (lives == 0) {
+        gameOver();
+    } else {
+        var puzzle = e.target;
+        removePuzzle({x: puzzle.attributes.x.value, y: puzzle.attributes.y.value});
+        createAndPopulate();
     }
+
+    return false;
 }
 
 function createPuzzle(word) {
@@ -150,8 +143,8 @@ function randFromArray(arr, remove) {
 }
 
 // ugly workaround to retrigger animation...
-// jId should be of jquery form ("#cell_2_1" and such)
-function rebootTransition(jId, className) {
+// jId should be of jquery form (".cell[x=0][y=1]" and such)
+function rebootAnimation(jId, className) {
     var old = $(jId);
     old.removeClass(className);
     old.replaceWith(old.clone(true));
@@ -166,23 +159,9 @@ function populate(target) {
     board[where.x][where.y] = target;
     populated.push(where);
     
-    rebootTransition("#" + cellString(where.x, where.y), "grid-cell-populated")
+    rebootAnimation(cellString(where.x, where.y), "grid-cell-populated")
+        .one("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", puzzleFailedHandler)
         .text(target.word);
-    
-
-    // $("<div/>")
-        // .html(word)
-        // .attr("id", "puzzle_" + puzzleId)
-        // .attr("class", "puzzle")
-        // .css("text-align", "center")
-        // .appendTo("#puzzles");
-
-    // $("<span/>")
-        // .html(" " + target.timeout.toFixed(2))
-        // .attr("id", "timeout_" + puzzleId)
-        // .attr("class", "timeout")
-        // .css("text-align", "center")
-        // .appendTo("#puzzles");
 }
 
 function doCreateAndPopulate(word) {
@@ -219,7 +198,7 @@ function createBoard(rows) {
         row = $("<div/>").attr("class", "grid-row");
         for (j = 0; j < CELLS_IN_ROW; j++) {
             empty.push({x: i, y: j});
-            cell = $("<div/>").attr("class", "grid-cell").attr("id", cellString(i,j));
+            cell = $("<div/>").attr("class", "grid-cell").attr("x", i).attr("y", j);
             row.append(cell);
         }
         $("#game-container").append(row);
@@ -227,7 +206,6 @@ function createBoard(rows) {
 }
 
 function newGame() {
-    clearInterval(interval);
     targets = [];
     board = [];
     empty = [];
@@ -241,7 +219,6 @@ function newGame() {
     createAndPopulate("nahui");
     createAndPopulate("blip");
     $(document).keypress(keypress);
-    // interval = setInterval(doTimeouts, INTERVAL);
 }
 
 $(document).ready(function () {
@@ -254,5 +231,7 @@ $(document).ready(function () {
 /* TODO:
     calc cell width wrt CELLS_IN_ROW
     levels according to statistics
+    check we're on english
+    save best on computer
 */
 

@@ -125,11 +125,19 @@ h1#title {
              @keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
 
 
+.paused {
+  -webkit-animation-play-state: paused;
+     -moz-animation-play-state: paused;
+          -o-animation-play-state: paused;
+               animation-play-state: paused;
+}
+             
 .grid-cell-populated {
     -webkit-animation: blacken 10s;
        -moz-animation: blacken 10s;
             -o-animation: blacken 10s;
                  animation: blacken 10s;
+     background: black;
 }
 
 .grid-cell:last-child {
