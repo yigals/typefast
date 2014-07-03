@@ -25,7 +25,6 @@ function incrementScore(points) {
     best = $("#best");
     if (best.html() < score)
         best.html(score);
-    
 }
 
 //handles char success and returns whether there was any
@@ -66,6 +65,8 @@ function removeItem(arr, item) {
 
 function checkSuccess(key) {
     var succeeded = [];
+    var target;
+    var where;
 
     for (i = 0; i < populated.length; i++) {
         where = populated[i];
