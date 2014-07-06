@@ -69,10 +69,17 @@ function wordSuccess(where) {
     return false;
 }
 
-function removeItem(arr, item) {
-    var index = arr.indexOf(item);
-    if (index != -1)
-        return arr.splice(index, 1)[0];
+function removeItem(arr, item) { // works with simple JSONable objects. 
+    var jsonItem = JSON.stringify(item);
+    
+    for (var i = 0; i < arr.length; i++) {
+        if (JSON.stringify(arr[i]) == jsonItem) {
+            arr = arr.splice(i, 1)[0];
+            break;
+        }
+    }
+
+    return arr;
 }
 
 function checkSuccess(key) {
@@ -96,7 +103,7 @@ function removePuzzle(where) {
         removeItem(populated, where);
         board[where.x][where.y] = undefined;
         empty.push(where);
-        $(cellString(where.x, where.y)).html("").removeClass("grid-cell-populated");
+        $(cellString(where.x, where.y)).html("").off().removeClass("grid-cell-populated");
 }
 
 function removeSucceeded(succeeded) {
@@ -109,7 +116,6 @@ function removeSucceeded(succeeded) {
 }
 
 function keypress(key) {
-
     var succeeded; // list of indexes of completed puzzles
 
     succeeded = checkSuccess(key);
@@ -141,7 +147,7 @@ function puzzleFailedHandler(e) {
         gameOver();
     } else {
         var puzzle = e.target;
-        removePuzzle({x: puzzle.attributes.x.value, y: puzzle.attributes.y.value});
+        removePuzzle({x: Number(puzzle.attributes.x.value), y: Number(puzzle.attributes.y.value)});
         createAndPopulate();
     }
 
