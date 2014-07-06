@@ -33,7 +33,8 @@ function incrementScore(points) {
 function charSuccess(where, charCode) {
     var target = board[where.x][where.y];
     
-    if (charCode != target.word.charCodeAt(target.lenSuccess))
+    if (charCode != target.word.charCodeAt(target.lenSuccess) &&
+         charCode != target.word.charCodeAt(target.lenSuccess)-32) // in case CAPSLOCK is on
         return false;
 
     incrementScore();
@@ -73,7 +74,6 @@ function checkSuccess(key) {
     for (i = 0; i < populated.length; i++) {
         where = populated[i];
         target = board[where.x][where.y];
-        // TODO: allow also uppercase
         if (!target.lost)
             if (charSuccess(where, key.which))
                 if (wordSuccess(where))
