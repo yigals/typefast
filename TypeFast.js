@@ -257,12 +257,22 @@ function newGame() {
     $(document).keypress(keypress);
 }
 
+function checkCompat() {
+    return Modernizr.localstorage &&
+           Modernizr.opacity &&
+           Modernizr.cssanimations;
+}
+
 $(document).ready(function () {
+    if (!checkCompat()) {
+        $("body > :not(#compat)").hide();
+        $("#compat").css({display: "block"});
+        return;
+    }
     $("#best").text(localStorage.getItem("best") || 0);
     $(".new-game").click(newGame);
     newGame();
 });
-
 
 
 /* TODO:
