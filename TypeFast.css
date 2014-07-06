@@ -63,7 +63,7 @@ h1#title {
              @keyframes move-up { 0% { opacity: 0.7; top: 50px; } 100% { opacity: 0; top: -50px; } }
 
 
-#new-game {
+.new-game {
   margin-top: 10px;
   margin-left: auto;
   clear: both;
@@ -77,9 +77,10 @@ h1#title {
   font-size: 30px;
   color: white;
   font-weight: bold;
+  width: 200px;
 }
 
-#game-container {
+#board-container {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -142,4 +143,21 @@ h1#title {
 
 .grid-cell:last-child {
     margin-right: 0;
+}
+
+#game-over {
+    background: #293134;
+    opacity: 0.8;
+    border-radius: 6px;
+    font-size: 50px;
+    width: 860px;
+    height: 365px;
+    position: absolute;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+
+#go-again {
+    margin-left: 305px;
 }
