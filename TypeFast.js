@@ -8,6 +8,7 @@ var lives;
 var puzzleTimeout;
 var ROWS = 2;
 var COLS = 2;
+var startTime;
 
 function cellString(i, j) {
     return ".grid-cell" + "[x=" + i + "]" + "[y=" + j + "]";
@@ -155,6 +156,8 @@ function gameOver() {
     var populatedCells = $(".grid-cell-populated");
     populatedCells.off();
     populatedCells.addClass("paused");
+    var wpm = solved / ((new Date() - startTime) / 60 / 1000)
+    $("#wpm").text(wpm.toFixed(2));
     $("#game-over").show();
 }
 
@@ -260,6 +263,7 @@ function newGame() {
     createAndPopulate("great");
     createAndPopulate("game");
     $(document).keypress(keypress);
+    startTime = new Date();
 }
 
 function checkCompat() {
