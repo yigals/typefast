@@ -181,7 +181,8 @@ h1#title {
     color: white;
     opacity: 0.9;
     border-radius: 3px;
-    font-size: 50px;
+    font-size: 40px;
+    font-weight: bold;
     width: 860px;
     height: 365px;
     position: absolute;
