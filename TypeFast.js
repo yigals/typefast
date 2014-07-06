@@ -1,8 +1,8 @@
 var board = [];
 var empty = [];
 var populated = [];
-var score = 0;
-var lives = 3;
+var score;
+var lives;
 var TIMEOUT = 10;
 var CELLS_IN_ROW = 2;
 
@@ -135,6 +135,7 @@ function puzzleFailedHandler(e) {
         return false;
 
     lives--;
+    $("#lives").text(lives);
 
     if (lives == 0) {
         gameOver();
@@ -218,7 +219,8 @@ function newGame() {
     score = 0;
     lives = 3;
     $("#board-container").html("");
-    $(".score").html(0);
+    $(".score").html(score);
+    $("#lives").text(lives);
     $("#game-over").hide();
     createBoard(2);
     createAndPopulate("blat");
