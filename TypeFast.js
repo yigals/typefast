@@ -2,6 +2,7 @@ var board = [];
 var empty = [];
 var populated = [];
 var score;
+var solved;
 var lives;
 var TIMEOUT = 10;
 var CELLS_IN_ROW = 2;
@@ -92,8 +93,10 @@ function checkSuccess(key) {
         target = board[where.x][where.y];
         if (!target.lost)
             if (charSuccess(where, key.which))
-                if (wordSuccess(where))
+                if (wordSuccess(where)) {
                     succeeded.push(where);
+                    $("#solved").text(++solved);
+                }
     }
 
     return succeeded;
@@ -224,9 +227,11 @@ function newGame() {
     populated = [];
     score = 0;
     lives = 3;
+    solved = 0;
     $("#board-container").html("");
     $(".score").html(score);
     $("#lives").text(lives);
+    $("#solved").text(solved);
     $("#game-over").hide();
     createBoard(2);
     createAndPopulate("blat");
