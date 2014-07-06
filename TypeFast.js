@@ -3,8 +3,9 @@ var empty = [];
 var populated = [];
 var score;
 var solved;
+var level;
 var lives;
-var TIMEOUT = 10;
+var puzzleTimeout;
 var CELLS_IN_ROW = 2;
 
 function cellString(i, j) {
@@ -19,6 +20,11 @@ function rebootAnimation(jId, className) {
     old.replaceWith(old.clone(true));
 
     return $(jId).addClass(className);
+}
+
+function setAnimationDuration(sel, timeout_ms) {
+    t = timeout_ms + 'ms';
+    $(sel).css({'-webkit-animation-duration': t, '-moz-animation-duration': t, '-o-animation-duration': t, 'animation-duration': t});
 }
 
 function incrementScore(points) {
@@ -60,6 +66,14 @@ function charSuccess(where, charCode) {
     return true;
 }
 
+function levelUp() {
+    if (solved >= level * (level + 1)) { // in each level solve 2*level puzzles. calculation is left for the lazy reader
+        level++;
+        $("#level").text(level);
+        puzzleTimeout *= 0.9;
+    }
+}
+
 function wordSuccess(where) {
     var target = board[where.x][where.y];
 
@@ -96,6 +110,7 @@ function checkSuccess(key) {
                 if (wordSuccess(where)) {
                     succeeded.push(where);
                     $("#solved").text(++solved);
+                    levelUp();
                 }
     }
 
@@ -158,7 +173,7 @@ function puzzleFailedHandler(e) {
 }
 
 function createPuzzle(word) {
-    var target = {word: word, lenSuccess: 0, timeout: TIMEOUT, lost: false};
+    var target = {word: word, lenSuccess: 0, timeout: puzzleTimeout, lost: false};
     return target;
 }
 
@@ -194,14 +209,14 @@ function createAndPopulate(arg) {
 
     if (typeof arg == "string") {
         doCreateAndPopulate(arg);
-        return;
+    } else {
+        num = arg || 1;
+        for (i = 0; i < num; i++) {
+            word = randFromArray(words);
+            doCreateAndPopulate(word);
+        }
     }
-
-    num = arg || 1;
-    for (i = 0; i < num; i++) {
-        word = randFromArray(words);
-        doCreateAndPopulate(word);
-    }
+    setAnimationDuration(".grid-cell-populated", puzzleTimeout);
 }
 
 function createBoard(rows) {
@@ -227,7 +242,9 @@ function newGame() {
     populated = [];
     score = 0;
     lives = 3;
+    level = 0;
     solved = 0;
+    puzzleTimeout = 10000;
     $("#board-container").html("");
     $(".score").html(score);
     $("#lives").text(lives);
