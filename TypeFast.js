@@ -1,4 +1,3 @@
-
 var targets = [];
 var board = [];
 var empty = [];
@@ -6,9 +5,20 @@ var populated = [];
 var score = 0;
 var lives = 3;
 var TIMEOUT = 10;
+var CELLS_IN_ROW = 2;
 
 function cellString(i, j) {
     return ".grid-cell" + "[x=" + i + "]" + "[y=" + j + "]";
+}
+
+// ugly workaround to retrigger animation...
+// jId should be a jquery selector
+function rebootAnimation(jId, className) {
+    var old = $(jId);
+    old.removeClass(className);
+    old.replaceWith(old.clone(true));
+
+    return $(jId).addClass(className);
 }
 
 function incrementScore(points) {
@@ -16,12 +26,12 @@ function incrementScore(points) {
     var best;
 
     $("#plus").html(points);
-   
+
     rebootAnimation("#plus-container", "plus-container-animation");
 
     score += points;
     $(".score").html(score);
-    
+
     best = $("#best");
     if (best.html() < score) {
         best.html(score);
@@ -32,9 +42,9 @@ function incrementScore(points) {
 //handles char success and returns whether there was any
 function charSuccess(where, charCode) {
     var target = board[where.x][where.y];
-    
-    if (charCode != target.word.charCodeAt(target.lenSuccess) &&
-         charCode != target.word.charCodeAt(target.lenSuccess)-32) // in case CAPSLOCK is on
+
+    if (charCode !== target.word.charCodeAt(target.lenSuccess) &&
+        charCode !== target.word.charCodeAt(target.lenSuccess)-32) // in case CAPSLOCK is on
         return false;
 
     incrementScore();
@@ -71,7 +81,7 @@ function checkSuccess(key) {
     var target;
     var where;
 
-    for (i = 0; i < populated.length; i++) {
+    for (var i = 0; i < populated.length; i++) {
         where = populated[i];
         target = board[where.x][where.y];
         if (!target.lost)
@@ -91,6 +101,8 @@ function removePuzzle(where) {
 }
 
 function removeSucceeded(succeeded) {
+    var where;
+
     for (var i = 0; i < succeeded.length; i++) {
         where = succeeded[i];
         removePuzzle(where);
@@ -98,9 +110,9 @@ function removeSucceeded(succeeded) {
 }
 
 function keypress(key) {
-    
+
     var succeeded; // list of indexes of completed puzzles
-    
+
     succeeded = checkSuccess(key);
 
     // removing succeeded targets here so `populated`'s length wouldn't change
@@ -149,23 +161,13 @@ function randFromArray(arr, remove) {
     return element;
 }
 
-// ugly workaround to retrigger animation...
-// jId should be of jquery form (".cell[x=0][y=1]" and such)
-function rebootAnimation(jId, className) {
-    var old = $(jId);
-    old.removeClass(className);
-    old.replaceWith(old.clone(true));
-    
-    return $(jId).addClass(className);
-}
-
 function populate(target) {
     // console.log("FUNCTION:   " + arguments.callee.name);
     var where = randFromArray(empty, true);
-    
+
     board[where.x][where.y] = target;
     populated.push(where);
-    
+
     rebootAnimation(cellString(where.x, where.y), "grid-cell-populated")
         .one("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", puzzleFailedHandler)
         .text(target.word);
@@ -180,26 +182,24 @@ function doCreateAndPopulate(word) {
 //if it's a number, create several random words.
 function createAndPopulate(arg) {
     var word, num, i;
-    
+
     if (typeof arg == "string") {
         doCreateAndPopulate(arg);
         return;
     }
-    
-    num = arg || 1;    
+
+    num = arg || 1;
     for (i = 0; i < num; i++) {
         word = randFromArray(words);
         doCreateAndPopulate(word);
     }
 }
 
-CELLS_IN_ROW = 2;
-
 function createBoard(rows) {
     rows = rows || 2;
     var row, cell;
     var i, j;
-    
+
     for (i = 0; i < rows; i++) {
         board.push([]);
         row = $("<div/>").attr("class", "grid-row");
@@ -238,8 +238,6 @@ $(document).ready(function () {
 
 
 /* TODO:
-    calc cell width wrt CELLS_IN_ROW
     levels according to statistics
-    check we're on english
 */
 
