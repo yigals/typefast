@@ -23,8 +23,10 @@ function incrementScore(points) {
     $(".score").html(score);
     
     best = $("#best");
-    if (best.html() < score)
+    if (best.html() < score) {
         best.html(score);
+        localStorage.setItem("best", score);
+    }
 }
 
 //handles char success and returns whether there was any
@@ -228,6 +230,7 @@ function newGame() {
 }
 
 $(document).ready(function () {
+    $("#best").text(localStorage.getItem("best") || 0);
     $(".new-game").click(newGame);
     newGame();
 });
@@ -238,6 +241,5 @@ $(document).ready(function () {
     calc cell width wrt CELLS_IN_ROW
     levels according to statistics
     check we're on english
-    save best on computer
 */
 
