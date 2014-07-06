@@ -29,6 +29,7 @@ function setAnimationDuration(sel, timeout_ms) {
 
 function incrementScore(points) {
     points = points || 1;
+    points *= level;
     var best;
 
     $("#plus").html(points);
