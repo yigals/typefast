@@ -20,7 +20,7 @@ function incrementScore(points) {
     rebootAnimation("#plus-container", "plus-container-animation");
 
     score += points;
-    $("#score").html(score);
+    $(".score").html(score);
     
     best = $("#best");
     if (best.html() < score)
@@ -114,9 +114,13 @@ function gameOver() {
     var populatedCells = $(".grid-cell-populated");
     populatedCells.off();
     populatedCells.addClass("paused");
+    $("#game-over").show();
 }
 
 function puzzleFailedHandler(e) {
+    if (lives == 0) // in case 2 timeouts occured at about the same time
+        return false;
+
     lives--;
 
     if (lives == 0) {
@@ -202,7 +206,7 @@ function createBoard(rows) {
             cell = $("<div/>").attr("class", "grid-cell").attr("x", i).attr("y", j);
             row.append(cell);
         }
-        $("#game-container").append(row);
+        $("#board-container").append(row);
     }
 }
 
@@ -213,8 +217,9 @@ function newGame() {
     populated = [];
     score = 0;
     lives = 3;
-    $("#game-container").html("");
-    $("#score").html(score);
+    $("#board-container").html("");
+    $(".score").html(0);
+    $("#game-over").hide();
     createBoard(2);
     createAndPopulate("blat");
     createAndPopulate("nahui");
@@ -223,7 +228,7 @@ function newGame() {
 }
 
 $(document).ready(function () {
-    $("#new-game").click(newGame);
+    $(".new-game").click(newGame);
     newGame();
 });
 
