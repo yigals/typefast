@@ -110,12 +110,15 @@ h1#title {
     color: green;
 }
 
-#board-container {
+.no-user-select, .new-game {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
-    user-select: none;    
+    user-select: none;
+}
+
+#board-container {
     background: #577ca1;
     border-radius: 6px;
     cursor: default;
