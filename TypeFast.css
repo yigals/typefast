@@ -125,10 +125,11 @@ h1#title {
     color: white;
 }
 
-@-webkit-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
-   @-moz-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
-        @-o-keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
-             @keyframes blacken { 0% { background: #97bce1; } 100% { background: #000000; } }
+                                                                                                        /* looks black enough... */
+@-webkit-keyframes blacken { 0% { background: #97bce1; } 100% { background: #0E0E0E; } }
+   @-moz-keyframes blacken { 0% { background: #97bce1; } 100% { background: #0E0E0E; } }
+        @-o-keyframes blacken { 0% { background: #97bce1; } 100% { background: #0E0E0E; } }
+             @keyframes blacken { 0% { background: #97bce1; } 100% { background: #0E0E0E; } }
 
 
 .paused {
@@ -139,10 +140,10 @@ h1#title {
 }
              
 .grid-cell-populated {
-    -webkit-animation: blacken 10s;
-       -moz-animation: blacken 10s;
-            -o-animation: blacken 10s;
-                 animation: blacken 10s;
+    -webkit-animation: blacken;
+       -moz-animation: blacken;
+            -o-animation: blacken;
+                 animation: blacken;
      background: black;
 }
 
