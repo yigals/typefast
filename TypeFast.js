@@ -1,4 +1,3 @@
-var targets = [];
 var board = [];
 var empty = [];
 var populated = [];
@@ -213,7 +212,6 @@ function createBoard(rows) {
 }
 
 function newGame() {
-    targets = [];
     board = [];
     empty = [];
     populated = [];
