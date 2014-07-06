@@ -5,9 +5,10 @@
 
 
 <head>
- <link rel="stylesheet" type="text/css" href="TypeFast.css" />
+ <link rel="stylesheet" type="text/css" href="TypeFast.css"/>
  <link rel="icon" href="favicon.ico">
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ <script src="modernizr.custom.67047.js"></script>
  <script src="lwordlist.js"></script>
  <script src="TypeFast.js"></script>
  <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -31,6 +32,13 @@
    </div>
  </div>
  
+ <img id="compat" src="yuno.jpg" usemap="#compatmap"/>
+ <map name="compatmap">
+    <area shape="circle" coords="169,466,30" alt="Chrome" href="http://www.google.com/chrome/browser/"/>
+    <area shape="circle" coords="241,466,30" alt="Firefox" href="http://www.mozilla.org/he/firefox/new/"/>
+    <area shape="circle" coords="306,466,30" alt="Safari" href="http://support.apple.com/kb/dl1531"/>
+ </map>
+
  <div class="above-game">LEVEL: <span id="level">1</span></div>
  <span class="above-game">LIVES: <span id="lives">3</span></span>
  <span class="above-game">SOLVED: <span id="solved">0</span></span>
@@ -45,7 +53,5 @@
  </div>
  
 </body>
-
-
 
 </html>

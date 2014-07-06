@@ -13,6 +13,11 @@ body {
   margin: 80px auto;
 }
 
+#compat {
+    display: none;
+    margin: auto auto;
+}
+
 #heading:after {
     clear: both;
     content: "";
