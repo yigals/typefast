@@ -64,8 +64,7 @@ h1#title {
 
 
 .new-game {
-  margin-top: 10px;
-  margin-left: auto;
+  margin: 10px auto;
   clear: both;
   background: #476c91;
   border-radius: 10px;
@@ -157,8 +156,4 @@ h1#title {
     text-align: center;
     display: none;
     z-index: 100;
-}
-
-#go-again {
-    margin-left: 305px;
 }
