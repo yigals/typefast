@@ -34,7 +34,7 @@ function incrementScore(points) {
 
     $("#plus").html(points);
 
-    rebootAnimation("#plus-container", "plus-container-animation");
+    rebootAnimation("#plus-container", "fade-up-animation");
 
     score += points;
     $(".score").html(score);
@@ -72,6 +72,7 @@ function levelUp() {
         level++;
         $("#level").text(level);
         puzzleTimeout *= 0.9;
+        rebootAnimation("#levelup", "fade-up-animation");
     }
 }
 
@@ -111,6 +112,7 @@ function checkSuccess(key) {
                 if (wordSuccess(where)) {
                     succeeded.push(where);
                     $("#solved").text(++solved);
+                    rebootAnimation("#solvedup", "fade-up-animation");
                     levelUp();
                 }
     }
@@ -160,6 +162,7 @@ function puzzleFailedHandler(e) {
         return false;
 
     lives--;
+    rebootAnimation("#lifedown", "fade-up-animation");
     $("#lives").text(lives);
 
     if (lives == 0) {
@@ -243,13 +246,14 @@ function newGame() {
     populated = [];
     score = 0;
     lives = 3;
-    level = 0;
+    level = 1;
     solved = 0;
     puzzleTimeout = 10000;
     $("#board-container").html("");
     $(".score").html(score);
     $("#lives").text(lives);
     $("#solved").text(solved);
+    $("#level").text(level);
     $("#game-over").hide();
     createBoard(2);
     createAndPopulate("blat");
@@ -274,9 +278,3 @@ $(document).ready(function () {
     $(".new-game").click(newGame);
     newGame();
 });
-
-
-/* TODO:
-    levels according to statistics
-*/
-

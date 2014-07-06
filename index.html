@@ -39,9 +39,15 @@
     <area shape="circle" coords="306,466,30" alt="Safari" href="http://support.apple.com/kb/dl1531"/>
  </map>
 
- <div class="above-game">LEVEL: <span id="level">1</span></div>
- <span class="above-game">LIVES: <span id="lives">3</span></span>
- <span class="above-game">SOLVED: <span id="solved">0</span></span>
+ <div class="above-game">LEVEL: <span id="level">1</span>
+    <span class="changers" id="levelup">+1</span>
+ </div>
+ <span class="above-game">LIVES: <span id="lives">3</span>
+     <span class="changers" id="lifedown">-1</span>
+ </span>
+ <span class="above-game">SOLVED: <span id="solved">0</span>
+     <span class="changers" id="solvedup">+1</span>
+  </span>
  
  <div id="game-container">
      <div id="game-over">

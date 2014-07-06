@@ -62,7 +62,7 @@ h1#title {
   z-index: 2;
 }
 
-.plus-container-animation {
+.fade-up-animation {
   -webkit-animation: move-up 400ms ease-in;
      -moz-animation: move-up 400ms ease-in;
           -o-animation: move-up 400ms ease-in;
@@ -88,6 +88,26 @@ h1#title {
   color: white;
   font-weight: bold;
   width: 200px;
+}
+
+.changers {
+    z-index: 2;
+    font-size: 30px;
+    position: absolute;
+    opacity: 0;
+}
+
+
+#levelup {
+    color: yellow;
+}
+
+#lifedown {
+    color: red;
+}
+
+#solvedup {
+    color: green;
 }
 
 #board-container {
