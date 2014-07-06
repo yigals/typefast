@@ -256,9 +256,9 @@ function newGame() {
     $("#level").text(level);
     $("#game-over").hide();
     createBoard(2);
-    createAndPopulate("blat");
-    createAndPopulate("nahui");
-    createAndPopulate("blip");
+    createAndPopulate("wow");
+    createAndPopulate("great");
+    createAndPopulate("game");
     $(document).keypress(keypress);
 }
 
