@@ -6,7 +6,8 @@ var solved;
 var level;
 var lives;
 var puzzleTimeout;
-var CELLS_IN_ROW = 2;
+var ROWS = 2;
+var COLS = 2;
 
 function cellString(i, j) {
     return ".grid-cell" + "[x=" + i + "]" + "[y=" + j + "]";
@@ -224,14 +225,14 @@ function createAndPopulate(arg) {
 }
 
 function createBoard(rows) {
-    rows = rows || 2;
+    rows = rows || ROWS;
     var row, cell;
     var i, j;
 
     for (i = 0; i < rows; i++) {
         board.push([]);
         row = $("<div/>").attr("class", "grid-row");
-        for (j = 0; j < CELLS_IN_ROW; j++) {
+        for (j = 0; j < COLS; j++) {
             empty.push({x: i, y: j});
             cell = $("<div/>").attr("class", "grid-cell").attr("x", i).attr("y", j);
             row.append(cell);
@@ -255,7 +256,7 @@ function newGame() {
     $("#solved").text(solved);
     $("#level").text(level);
     $("#game-over").hide();
-    createBoard(2);
+    createBoard();
     createAndPopulate("wow");
     createAndPopulate("great");
     createAndPopulate("game");
