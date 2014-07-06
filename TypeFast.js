@@ -191,7 +191,6 @@ function randFromArray(arr, remove) {
 }
 
 function populate(target) {
-    // console.log("FUNCTION:   " + arguments.callee.name);
     var where = randFromArray(empty, true);
 
     board[where.x][where.y] = target;
