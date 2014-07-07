@@ -193,3 +193,7 @@ h1#title {
     display: none;
     z-index: 100;
 }
+
+#logo {
+    display: none;
+}
